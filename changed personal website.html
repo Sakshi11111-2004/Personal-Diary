@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Goal Tracker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .diary-cover {
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('https://images.unsplash.com/photo-1516796181074-bf453fbfa3e6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .diary-cover h1 {
+            color: #fff;
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            margin-bottom: 30px;
+        }
+
+        .diary-cover button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .diary-cover button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .motivational {
+            text-align: center;
+            font-size: 1.3em;
+            font-style: italic;
+            color: #666;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        form {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .goals {
+            margin-top: 40px;
+        }
+
+        .goals h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .goal-item {
+            background: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .goal-item h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .goal-item p {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .steps-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .steps-list h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .steps-list label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #444;
+            font-weight: normal;
+        }
+
+        .steps-list input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            padding: 8px 15px;
+            margin-top: 15px;
+            width: auto;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .success-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeOut 3s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .no-goals {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Diary Cover -->
+    <div class="diary-cover" id="diaryCover">
+        <h1>Welcome to Your Personal Goal Diary</h1>
+        <button id="openDiary">Open Your Diary</button>
+    </div>
+
+    <!-- Diary Content -->
+    <div class="container" id="diaryContent" style="display: none;">
+        <h1>My Personal Goal Tracker</h1>
+        <div class="motivational" id="motivationalThought"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <form id="goalForm">
+            <label for="goalName">Goal Name:</label>
+            <input type="text" id="goalName" placeholder="Enter your goal" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" rows="4" placeholder="Describe your goal"></textarea>
+
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" required>
+
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" required>
+
+            <label for="steps">Steps (comma-separated):</label>
+            <input type="text" id="steps" placeholder="Step 1, Step 2, Step 3">
+
+            <button type="submit">Save Goal</button>
+        </form>
+
+        <div class="goals" id="goalsList">
+            <h2>My Goals</h2>
+            <!-- Goals will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize elements
+            const diaryCover = document.getElementById('diaryCover');
+            const diaryContent = document.getElementById('diaryContent');
+            const openDiaryButton = document.getElementById('openDiary');
+            const goalForm = document.getElementById('goalForm');
+            const goalsList = document.getElementById('goalsList');
+            const motivationalThought = document.getElementById('motivationalThought');
+            const successMessage = document.getElementById('successMessage');
+
+            // Motivational quotes
+            const quotes = [
+                "Believe you can and you're halfway there.",
+                "Small progress is still progress.",
+                "Your future is created by what you do today.",
+                "Dream big, start small, but most of all, start.",
+                "Success is built one step at a time."
+            ];
+
+            // Display random quote
+            motivationalThought.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+            // Show success message function
+            function showSuccessMessage(message) {
+                successMessage.textContent = message;
+                successMessage.classList.add('show');
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 3000);
+            }
+
+            // Open diary button click handler
+            openDiaryButton.addEventListener('click', () => {
+                diaryCover.style.display = 'none';
+                diaryContent.style.display = 'block';
+                displayGoals();
+            });
+
+            // Form submission handler
+            goalForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Get form values
+                const goalName = document.getElementById('goalName').value;
+                const description = document.getElementById('description').value;
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const steps = document.getElementById('steps').value
+                    .split(',')
+                    .map(step => step.trim())
+                    .filter(step => step.length > 0);
+
+                // Create goal object
+                const goal = {
+                    goalName,
+                    description,
+                    startDate,
+                    endDate,
+                    steps,
+                    createdAt: new Date().toISOString()
+                };
+
+                // Save goal
+                try {
+                    let goals = JSON.parse(localStorage.getItem('goals')) || [];
+                    goals.push(goal);
+                    localStorage.setItem('goals', JSON.stringify(goals));
+                    console.log('Goals saved:', goals);
+                } catch (error) {
+                    console.error('Error saving goal:', error);
+                }
+
+                // Show success message and reset form
+                showSuccessMessage('Goal saved successfully!');
+                goalForm.reset();
+                displayGoals();
+            });
+
+            // Display goals function
+            function displayGoals() {
+                const goals = JSON.parse(localStorage.getItem('goals')) || [];
+                goalsList.innerHTML = '<h2>My Goals</h2>';
+
+                if (goals.length === 0) {
+                    goalsList.innerHTML += '<div class="no-goals">No goals added yet. Start by adding a new goal!</div>';
+                    return;
+                }
+
+                goals.forEach((goal, index) => {
+                    const goalHTML = `
+                        <div class="goal-item">
+                            <h3>${goal.goalName}</h3>
+                            <p><strong>Description:</strong> ${goal.description}</p>
+                            <p><strong>Start Date:</strong> ${goal.startDate}</p>
+                            <p><strong>End Date:</strong> ${goal.endDate}</p>
+                            <div class="steps-list">
+                                <h4>Steps to Achieve:</h4>
+                                ${goal.steps.map((step, stepIndex) => `
+                                    <label>
+                                        <input type="checkbox" 
+                                               id="step${index}-${stepIndex}" 
+                                               ${localStorage.getItem(`step${index}-${stepIndex}`) ? 'checked' : ''} 
+                                               onclick="saveStep(${index}, ${stepIndex})">
+                                        ${step}
+                                    </label>
+                                `).join('')}
+                            </div>
+                            <button class="delete-btn" onclick="deleteGoal(${index})">Delete Goal</button>
+                        </div>
+                    `;
+                    goalsList.innerHTML += goalHTML;
+                });
+
+                // Restore checkbox states
+                goals.forEach((goal, goalIndex) => {
+                    goal.steps.forEach((_, stepIndex) => {
+                        const checkbox = document.getElementById(`step${goalIndex}-${stepIndex}`);
+                        if (checkbox) {
+                            checkbox.checked = localStorage.getItem(`step${goalIndex}-${stepIndex}`) === 'true';
+                        }
+                    });
+                });
+            }
+
+            // Initial display of goals
+            displayGoals();
+        });
+
+        // Global functions for checkbox and delete operations
+        function saveStep(goalIndex, stepIndex) {
+            const checkbox = document.getElementById(`step${goalIndex}-${stepIndex}`);
+            localStorage.setItem(`step${goalIndex}-${stepIndex}`, checkbox.checked);
+        }
+
+        function deleteGoal(index) {
+            let goals = JSON.parse(localStorage.getItem('goals')) || [];
+            goals.splice(index, 1);
+            localStorage.setItem('goals', JSON.stringify(goals));
+            
+            // Clean up related step checkboxes
+            const goalSteps = document.querySelectorAll(`[id^="step${index}-"]`);
+            goalSteps.forEach(step => {
+                localStorage.removeItem(step.id);
+            });
+            
+            showSuccessMessage('Goal deleted successfully!');
+            displayGoals();
+        }
+
+        function showSuccessMessage(message) {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = message;
+            successMessage.classList.add('show');
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
